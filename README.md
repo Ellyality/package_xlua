@@ -5,43 +5,39 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/Tencent/xLua/pulls)
 [![Build status](https://travis-ci.org/Tencent/xLua.svg?branch=master)](https://travis-ci.org/Tencent/xLua)
 
-[(English Documents Available)](README_EN.md)
+## Lua programming solution for C#
 
-## C#下Lua编程支持
+xLua adds Lua scripting capability to Unity, .Net, Mono, and other C# environments. With xLua, Lua code and C# code can easily call each other.
 
-xLua为Unity、 .Net、 Mono等C#环境增加Lua脚本编程的能力，借助xLua，这些Lua代码可以方便的和C#相互调用。
+## xLua's superior features
 
-## xLua的突破
+xLua has many breakthroughs in function, performance, and ease of use. The most significant features are:
 
-xLua在功能、性能、易用性都有不少突破，这几方面分别最具代表性的是：
+* You can use C# implementations (methods, operators, properties, events, etc...) in Lua.
+* Outstanding GC optimization, customized struct, no C# gc alloc when passing the enumerated objects between C# and Lua;
+* Lightweight development with no needs to generate code in editor mode;
 
-* 可以运行时把C#实现（方法，操作符，属性，事件等等）替换成lua实现；
-* 出色的GC优化，自定义struct，枚举在Lua和C#间传递无C# gc alloc；
-* 编辑器下无需生成代码，开发更轻量；
+## Installation
 
-更详细的特性、平台支持介绍请看[这里](Assets/XLua/Doc/features.md)。
+Unpack the ZIP package and you will see an Assets directory, which corresponds to the Unity project's Assets directory. Keep the directory structure in your Unity project.
 
-## 安装
+If you want to install it to another directory, please see the [FAQs](Assets/XLua/Doc/Faq_EN.md).
 
-打开zip包，你会看到一个Assets目录，这目录就对应Unity工程的Assets目录，保持这目录结构放到你的Unity工程。
+## Documents
 
-如果希望安装到其它目录，请看[FAQ](Assets/XLua/Doc/faq.md)相关介绍。
+* [FAQs](Assets/XLua/Doc/Faq_EN.md): Frequently asked questions are summarized here. You can find answers to questions for beginners.
+* (Must-read) [XLua Tutorial](Assets/XLua/Doc/XLua_Tutorial_EN.md): This is a tutorial. The supporting code can be found [here](Assets/XLua/Tutorial/).
+* (Must-read) [XLua Configuration](Assets/XLua/Doc/Configure_EN.md): Descriptions on how to configure xLua.
+* [Hotfix Operation Guide](Assets/XLua/Doc/Hotfix_EN.md): Description on how to use the hotfix feature.
+* [Add/remove third-party Lua Libraries on xLua](Assets/XLua/Doc/Add_Remove_Lua_Lib.md): Descriptions on how to add or remove third-party Lua extension libraries.
+* [xLua APIs](Assets/XLua/Doc/XLua_API_EN.md): API documentation
+* [Secondary Development of the Build Engine](Assets/XLua/Doc/Custom_Generate_EN.md): Descriptions on how to do secondary development of the build engine.
 
-## 文档
+## Quick Start
 
-* [常见问题解答](Assets/XLua/Doc/faq.md)：常见问题都总结在这里，初使用大多数问题都可以在这里找到答案。
-* (必看)[XLua教程](Assets/XLua/Doc/XLua教程.md)：教程，其配套代码[这里](Assets/XLua/Tutorial/)。
-* (必看)[XLua的配置](Assets/XLua/Doc/configure.md)：介绍如何配置xLua。
-* [热补丁操作指南](Assets/XLua/Doc/hotfix.md)：介绍如何使用热补丁特性。
-* [XLua增加删除第三方lua库](Assets/XLua/Doc/XLua增加删除第三方lua库.md)：如何增删第三方lua扩展库。
-* [XLua API](Assets/XLua/Doc/XLua_API.md)：API文档。
-* [生成引擎二次开发指南](Assets/XLua/Doc/custom_generate.md)：介绍如何做生成引擎的二次开发。
+A complete example requires only 3 lines of code:
 
-## 快速入门
-
-一个完整的例子仅需3行代码：
-
-安装好xLua，建一个MonoBehaviour拖到场景，在Start加入如下代码：
+Install xLua, create a MonoBehaviour drag scenario, add the following code to Start:
 
 ```csharp
 XLua.LuaEnv luaenv = new XLua.LuaEnv();
@@ -49,67 +45,63 @@ luaenv.DoString("CS.UnityEngine.Debug.Log('hello world')");
 luaenv.Dispose();
 ```
 
-1、DoString参数为string，可输入任意合法的Lua代码，本示例在lua里调用C#的UnityEngine.Debug.Log打印了个日志。
+1. The DoString parameter is a string, and you can enter any allowable Lua code. In this example, Lua calls C#’s UnityEngine.Debug.Log to print a log.
 
-2、一个LuaEnv实例对应Lua虚拟机，出于开销的考虑，建议全局唯一。
+2. A LuaEnv instance corresponds to a Lua virtual machine. Due to overhead, it is recommended that the Lua virtual machine be globally unique.
 
-C#主动调用lua也很简单，比如要调用lua的系统函数，推荐方式是：
+It is simple that C# actively calls Lua. For example, the recommended method to call Lua's system function is:
 
-* 声明
+* Declare
 
 ```csharp
 [XLua.CSharpCallLua]
 public delegate double LuaMax(double a, double b);
 ```
 
-* 绑定
+* Bind
 
 ```csharp
 var max = luaenv.Global.GetInPath<LuaMax>("math.max");
 ```
 
-* 调用
+* Call
 
 ```csharp
 Debug.Log("max:" + max(32, 12));
 ```
 
-建议绑定一次，重复使用。生成了代码的话，调用max是不产生gc alloc的。
+It is recommended that you bind once and reuse it. If code is generated, no gc alloc is generated when calling max.
 
-## 热补丁
+## Hotfix
 
-* 侵入性小，老项目原有代码不做任何调整就可使用。
-* 运行时影响小，不打补丁基本和原有程序一样。
-* 出问题了可以用Lua来打补丁，这时才会走到lua代码逻辑；
+* This has lower intrusiveness, and it can be used without any modification of the original code of the old project.
+* This has little impact on the runtime, which is almost the same as the original program which hotfix is not used.
+* If you have problems, you can also use Lua to patch. Then the Lua code logic is involved.
 
-[这里](Assets/XLua/Doc/hotfix.md)是使用指南。
+[Here](Assets/XLua/Doc/Hotfix_EN.md) is the usage guide:
 
-## 更多示例
+## More Examples
 
-* [01_Helloworld](Assets/XLua/Examples/01_Helloworld/): 快速入门的例子。
-* [02_U3DScripting](Assets/XLua/Examples/02_U3DScripting/): 展示怎么用lua来写MonoBehaviour。
-* [03_UIEvent](Assets/XLua/Examples/03_UIEvent/): 展示怎么用lua来写UI逻辑。
-* [04_LuaObjectOrented](Assets/XLua/Examples/04_LuaObjectOrented/): 展示lua面向对象和C#的配合。
-* [05_NoGc](Assets/XLua/Examples/05_NoGc/): 展示怎么去避免值类型的GC。
-* [06_Coroutine](Assets/XLua/Examples/06_Coroutine/): 展示lua协程怎么和Unity协程相配合。
-* [07_AsyncTest](Assets/XLua/Examples/07_AsyncTest/): 展示怎么用lua协程来把异步逻辑同步化。
-* [08_Hotfix](Assets/XLua/Examples/08_Hotfix/): 热补丁的示例（需要开启热补丁特性，如何开启请看[指南](Assets/XLua/Doc/hotfix.md)）。
-* [09_GenericMethod](Assets/XLua/Examples/09_GenericMethod/): 泛化函数支持的演示。
-* [10_SignatureLoader](Assets/XLua/Examples/10_SignatureLoader/): 展示如何读取经数字签名的lua脚本，参见[数字签名](Assets/XLua/Doc/signature.md)的文档介绍。
-* [11_RawObject](Assets/XLua/Examples/11_RawObject/): 当C#参数是object时，如何把一个lua number指定以boxing后的int传递过去。
-* [12_ReImplementInLua](Assets/XLua/Examples/12_ReImplementInLua/): 展示如何将复杂值类型改为lua实现。
+* [01_Helloworld](Assets/XLua/Examples/01_Helloworld/): Quick Start Examples
+* [02_U3DScripting](Assets/XLua/Examples/02_U3DScripting/): This example shows how to use Mono to write MonoBehaviour.
+* [03_UIEvent](Assets/XLua/Examples/03_UIEvent/): This example shows how to use Lua to write UI logic.
+* [04_LuaObjectOrented](Assets/XLua/Examples/04_LuaObjectOrented/): This example shows the cooperation between Lua's object-oriented programming and C#.
+* [05_NoGc](Assets/XLua/Examples/05_NoGc/): This example shows how to avoid the value type GC.
+* [06_Coroutine](Assets/XLua/Examples/06_Coroutine/): This example shows how Lua coroutines work with Unity coroutines.
+* [07_AsyncTest](Assets/XLua/Examples/07_AsyncTest/): This example shows how to use Lua coroutines to synchronize asynchronous logic.
+* [08_Hotfix](Assets/XLua/Examples/08_Hotfix/): These are Hotfix examples (Please enable hotfix feature. See the [Guide](Assets/XLua/Doc/Hotfix_EN.md) for details).
+* [09_GenericMethod](Assets/XLua/Examples/09_GenericMethod/): This is a generic function support demo.
+* [10_SignatureLoader](Assets/XLua/Examples/10_SignatureLoader/): This example shows how to read the Lua script with a digital signature. See the [Digital Signature](Assets/XLua/Doc/signature.md) document for details.
+* [11_RawObject](Assets/XLua/Examples/11_RawObject/): This example shows how to specify transferring a Lua number in the int after boxing when the C# parameter is an object.
+* [12_ReImplementInLua](Assets/XLua/Examples/12_ReImplementInLua/): This shows how to change complex value types to Lua implementations.
 
-## 技术支持
+## Technical support
 
-一群：612705778 (已满)
+QQ Group 1: 612705778 (may be full)
 
-二群：703073338 (已满)
+QQ Group 2: 703073338
 
-三群：811246782
+QQ Group 3: 811246782
 
-入群的问题：有问题该先从哪找答案
-
-回答：FAQ
-
-平时也要谨记这答案，90%以上问题都可以在[FAQ](Assets/XLua/Doc/faq.md)里头找到答案。这些问题就别在群刷屏了。
+Check answers: If you encounter a problem, please read the FAQs first.
 

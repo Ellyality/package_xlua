@@ -1,0 +1,21 @@
+{
+	"name": "com.ellyality.xlua",
+	"displayName":"XLua",
+	"version": "1.0.0",
+    "author": "Elly Script",
+    "unity": "2019.2",
+    "keywords": ["lua", "script"],
+    "category": "engineering",
+    "license": "LICENSE",
+	"description": "Provide lua runtime environment",
+    "documentationUrl": "https://github.com/Ellyality/package_xlua/blob/main/README.md",
+    "samples":[
+        {
+            "displayName": "Demo Scenes",
+            "description": "All the script use demo",
+            "path": "~Demo"
+        }
+    ],
+    "dependencies": {
+    }
+}
