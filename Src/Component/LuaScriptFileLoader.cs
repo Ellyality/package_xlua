@@ -6,9 +6,10 @@ using UnityEngine.Networking;
 
 namespace XLua.LuaDLL
 {
-    [AddComponentMenu("Ellyality/Script/Lua Loader")]
+    [AddComponentMenu("Ellyality/Script/Lua File Loader")]
     public class LuaScriptFileLoader : MonoBehaviour
     {
+        [System.Serializable]
         enum FileType
         {
             URL,

@@ -12,9 +12,9 @@ namespace XLua.LuaDLL
         [SerializeField] string chunkName = "LuaTestScript";
         [SerializeField] Injection[] injections;
 
-        internal static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
-        internal static float lastGCTime = 0;
-        internal const float GCInterval = 1;//1 second 
+        public static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
+        public static float lastGCTime = 0;
+        public const float GCInterval = 1;//1 second 
 
         Action luaStart;
         Action luaUpdate;
