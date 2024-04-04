@@ -3,8 +3,9 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using XLua;
 
-namespace XLua.LuaDLL
+namespace Ellyality.xlua
 {
     [AddComponentMenu("Ellyality/Script/Lua File Loader")]
     public class LuaScriptFileLoader : MonoBehaviour

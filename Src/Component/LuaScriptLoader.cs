@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using XLua;
 
-namespace XLua.LuaDLL
+namespace Ellyality.xlua
 {
-
     [AddComponentMenu("Ellyality/Script/Lua Loader")]
     public class LuaScriptLoader : MonoBehaviour
     {

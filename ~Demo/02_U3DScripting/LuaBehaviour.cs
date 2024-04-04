@@ -14,16 +14,16 @@ using System;
 
 namespace XLuaTest
 {
-    [System.Serializable]
-    public class Injection
-    {
-        public string name;
-        public GameObject value;
-    }
-
     [LuaCallCSharp]
     public class LuaBehaviour : MonoBehaviour
     {
+        [System.Serializable]
+        public class Injection
+        {
+            public string name;
+            public GameObject value;
+        }
+
         public TextAsset luaScript;
         public Injection[] injections;
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace XLua.LuaDLL
+namespace Ellyality.xlua
 {
     [System.Serializable]
     public class Injection
